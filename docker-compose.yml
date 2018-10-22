@@ -1,0 +1,16 @@
+version: "3"
+services:
+  zapier:
+    build: .
+    volumes:
+      - ./.eslintrc.json:/work/.eslintrc.json:ro
+      - ./.zapierapprc:/work/.zapierapprc:ro
+      - ./authentication.js:/work/authentication.js:ro
+      - ./index.js:/work/index.js:ro
+      - ./package.json:/work/package.json:ro
+      - ./test:/work/test:ro
+      - ./triggers:/work/triggers:ro
+    environment:
+      TEST_PASSWORD:
+      TEST_USERNAME:
+      ZAPIER_DEPLOY_KEY:
