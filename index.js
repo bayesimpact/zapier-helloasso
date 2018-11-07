@@ -4,6 +4,17 @@ const orgTrigger = require('./triggers/organization')
 const authentication = require('./authentication')
 
 const handleHTTPError = response => {
+  // TODO(pascal): Check with HelloAsso API owners why we get a 500 error code
+  // and clean up that patch.
+  if (response.status === 500) {
+    const {code} = JSON.parse(response.content)
+    if (code === 'com.helloasso.api.InvalidIdentifier') {
+      return {
+        content: '{"resources": []}',
+        status: 200,
+      }
+    }
+  }
   if (response.status >= 400) {
     throw new Error(`Unexpected status code ${response.status}`)
   }

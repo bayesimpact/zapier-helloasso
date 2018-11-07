@@ -1,16 +1,19 @@
+const formatDate = date => {
+  return new Date(date).toISOString().substr(0, '2018-11-07T20:20:31'.length)
+}
+
 const triggerPayment = (z, bundle) => {
   const responsePromise = z.request({
     method: 'GET',
-    params: {
-      from: bundle.inputData.from,
-      to: bundle.inputData.to,
+    // TODO(pascal): Ask a param to sort by most recent first to HelloAsso API
+    // owners and enable it when bundle.meta.frontend is true.
+    params: bundle.meta && bundle.meta.frontend ? {} : {
+      from: formatDate(new Date() - 1000 * 60 * 60 * 12),
     },
     url: 'https://api.helloasso.com/v3/organizations/' +
       `${bundle.inputData.organization}/campaigns/${bundle.inputData.campaign}/payments.json`,
   })
-  return responsePromise.
-    then(response => JSON.parse(response.content)).
-    then(jsonResponse => jsonResponse.resources)
+  return responsePromise.then(response => JSON.parse(response.content).resources)
 }
 
 module.exports = {
@@ -33,16 +36,6 @@ module.exports = {
         key: 'campaign',
         label: 'Campaign',
         required: true,
-      },
-      {
-        helpText: 'Minimum date of payment creation',
-        key: 'from',
-        label: 'From',
-      },
-      {
-        helpText: 'Maximum date of payment creation',
-        key: 'to',
-        label: 'To',
       },
     ],
     perform: triggerPayment,

@@ -2,9 +2,7 @@ const triggerCampaign = (z, bundle) => {
   const responsePromise = z.request({
     url: `https://api.helloasso.com/v3/organizations/${bundle.inputData.organization}/campaigns.json`,
   })
-  return responsePromise.
-    then(response => JSON.parse(response.content)).
-    then(jsonResponse => jsonResponse.resources)
+  return responsePromise.then(response => JSON.parse(response.content).resources)
 }
 
 module.exports = {
