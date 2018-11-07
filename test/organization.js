@@ -21,6 +21,7 @@ describe('organization trigger', () => {
     appTester(App.triggers.organization.operation.perform, bundle).
       then((response) => {
         response.should.be.an.instanceOf(Array)
+        response[0].should.have.properties(['id', 'name'])
         done()
       }).
       catch(done)
